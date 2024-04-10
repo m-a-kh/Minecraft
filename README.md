@@ -1,4 +1,4 @@
-# MavenMCP 1.8.9
+# minecraft 1.8.9
 
 ### About
 
