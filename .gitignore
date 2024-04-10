@@ -1,3 +1,5 @@
+./test_run
+
 # Project exclude paths
 /target/
 /.idea/
