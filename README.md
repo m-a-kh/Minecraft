@@ -13,5 +13,6 @@ minecraft 1.8.9 is an updated version of MCP. It uses gradle, has a clean code s
 
 ### Running
 
-To launch the client in the IDE, you need to execute Start.java, **and specify working directory to `./test_run/`**.<br>
+To launch the client in the IDE, you need to execute Start.java, **create `./test_run/` and specify working directory
+to `./test_run/`**.<br>
 Minecraft's directory will be `./test_run/`. All saves, resource packs etc. will be there.
