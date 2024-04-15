@@ -150,11 +150,12 @@ public class GuiOptions extends GuiScreen implements GuiYesNoCallback
                 this.mc.displayGuiScreen(new GuiYesNo(this, (new ChatComponentTranslation("difficulty.lock.title", new Object[0])).getFormattedText(), (new ChatComponentTranslation("difficulty.lock.question", new Object[] {new ChatComponentTranslation(this.mc.theWorld.getWorldInfo().getDifficulty().getDifficultyResourceKey(), new Object[0])})).getFormattedText(), 109));
             }
 
-            if (button.id == 110)
-            {
-                this.mc.gameSettings.saveOptions();
-                this.mc.displayGuiScreen(new GuiCustomizeSkin(this));
-            }
+            // TODO: 4/15/2024
+//            if (button.id == 110)
+//            {
+//                this.mc.gameSettings.saveOptions();
+//                this.mc.displayGuiScreen(new GuiCustomizeSkin(this));
+//            }
 
             if (button.id == 8675309)
             {

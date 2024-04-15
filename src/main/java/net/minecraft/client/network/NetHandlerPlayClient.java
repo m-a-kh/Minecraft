@@ -1210,7 +1210,8 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         }
         else if (i == 4)
         {
-            this.gameController.displayGuiScreen(new GuiWinGame());
+            // TODO: 4/15/2024
+//            this.gameController.displayGuiScreen(new GuiWinGame());
         }
         else if (i == 6)
         {

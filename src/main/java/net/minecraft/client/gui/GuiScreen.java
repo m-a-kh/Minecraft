@@ -421,15 +421,16 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
                             throw new URISyntaxException(clickevent.getValue(), "Unsupported protocol: " + s.toLowerCase());
                         }
 
-                        if (this.mc.gameSettings.chatLinksPrompt)
-                        {
-                            this.clickedLinkURI = uri;
-                            this.mc.displayGuiScreen(new GuiConfirmOpenLink(this, clickevent.getValue(), 31102009, false));
-                        }
-                        else
-                        {
+                        // TODO: 4/15/2024
+//                        if (this.mc.gameSettings.chatLinksPrompt)
+//                        {
+//                            this.clickedLinkURI = uri;
+//                            this.mc.displayGuiScreen(new GuiConfirmOpenLink(this, clickevent.getValue(), 31102009, false));
+//                        }
+//                        else
+//                        {
                             this.openWebLink(uri);
-                        }
+//                        }
                     }
                     catch (URISyntaxException urisyntaxexception)
                     {
