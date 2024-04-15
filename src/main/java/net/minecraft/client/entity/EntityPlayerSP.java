@@ -3,20 +3,8 @@ package net.minecraft.client.entity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiEnchantment;
-import net.minecraft.client.gui.GuiHopper;
-import net.minecraft.client.gui.GuiMerchant;
-import net.minecraft.client.gui.GuiRepair;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenBook;
-import net.minecraft.client.gui.inventory.GuiBeacon;
-import net.minecraft.client.gui.inventory.GuiBrewingStand;
-import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.client.gui.inventory.GuiDispenser;
-import net.minecraft.client.gui.inventory.GuiEditSign;
-import net.minecraft.client.gui.inventory.GuiFurnace;
-import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.inventory.*;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IMerchant;
@@ -27,26 +15,12 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.network.play.client.C0CPacketInput;
-import net.minecraft.network.play.client.C0DPacketCloseWindow;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
-import net.minecraft.network.play.client.C16PacketClientStatus;
+import net.minecraft.network.play.client.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatFileWriter;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.MovementInput;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
@@ -564,7 +538,7 @@ public class EntityPlayerSP extends AbstractClientPlayer
 
     public void openEditSign(TileEntitySign signTile)
     {
-        this.mc.displayGuiScreen(new GuiEditSign(signTile));
+
     }
 
 
@@ -588,57 +562,16 @@ public class EntityPlayerSP extends AbstractClientPlayer
     {
         String s = chestInventory instanceof IInteractionObject ? ((IInteractionObject)chestInventory).getGuiID() : "minecraft:container";
 
-        if ("minecraft:chest".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiChest(this.inventory, chestInventory));
-        }
-        else if ("minecraft:hopper".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiHopper(this.inventory, chestInventory));
-        }
-        else if ("minecraft:furnace".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiFurnace(this.inventory, chestInventory));
-        }
-        else if ("minecraft:brewing_stand".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiBrewingStand(this.inventory, chestInventory));
-        }
-        else if ("minecraft:beacon".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiBeacon(this.inventory, chestInventory));
-        }
-        else if (!"minecraft:dispenser".equals(s) && !"minecraft:dropper".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiChest(this.inventory, chestInventory));
-        }
-        else
-        {
-            this.mc.displayGuiScreen(new GuiDispenser(this.inventory, chestInventory));
-        }
     }
 
     public void displayGUIHorse(EntityHorse horse, IInventory horseInventory)
     {
-        this.mc.displayGuiScreen(new GuiScreenHorseInventory(this.inventory, horseInventory, horse));
+
     }
 
     public void displayGui(IInteractionObject guiOwner)
     {
         String s = guiOwner.getGuiID();
-
-        if ("minecraft:crafting_table".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiCrafting(this.inventory, this.worldObj));
-        }
-        else if ("minecraft:enchanting_table".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiEnchantment(this.inventory, this.worldObj, guiOwner));
-        }
-        else if ("minecraft:anvil".equals(s))
-        {
-            this.mc.displayGuiScreen(new GuiRepair(this.inventory, this.worldObj));
-        }
     }
 
     public void displayVillagerTradeGui(IMerchant villager)

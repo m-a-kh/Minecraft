@@ -20,9 +20,11 @@ import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.achievement.GuiAchievement;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.main.GameConfiguration;
+import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.LanServerDetector;
 import net.minecraft.client.network.NetHandlerLoginClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.particle.EffectRenderer;
@@ -1735,6 +1737,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                     this.thePlayer.sendHorseInventory();
                 } else {
                     this.getNetHandler().addToSendQueue(new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT));
+                    // TODO: 4/15/2024
                     this.displayGuiScreen(new GuiInventory(this.thePlayer));
                 }
             }
@@ -2668,12 +2671,15 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         return this.connectedToRealms;
     }
 
-    /**
-     * Set if the player is connected to a realms server
-     *
-     * @param isConnected The value that set if the player is connected to a realms server or not
-     */
-    public void setConnectedToRealms(boolean isConnected) {
-        this.connectedToRealms = isConnected;
+
+    public void connectToSelected()
+    {
+            ServerData serverData = null;
+            this.connectToServer(serverData);
+    }
+
+    private void connectToServer(ServerData server)
+    {
+        displayGuiScreen(new GuiConnecting(currentScreen, getMinecraft(), server));
     }
 }
