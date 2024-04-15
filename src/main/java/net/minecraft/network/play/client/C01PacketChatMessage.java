@@ -44,7 +44,7 @@ public class C01PacketChatMessage implements Packet<INetHandlerPlayServer>
      */
     public void processPacket(INetHandlerPlayServer handler)
     {
-        handler.processChatMessage(this);
+
     }
 
     public String getMessage()

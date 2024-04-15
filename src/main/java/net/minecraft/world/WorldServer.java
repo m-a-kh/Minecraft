@@ -89,10 +89,6 @@ public class WorldServer extends World implements IThreadListener
     private boolean allPlayersSleeping;
     private int updateEntityTick;
 
-    /**
-     * the teleporter to use when the entity is being transferred into the dimension
-     */
-    private final Teleporter worldTeleporter;
     private final SpawnerAnimals mobSpawner = new SpawnerAnimals();
     protected final VillageSiege villageSiege = new VillageSiege(this);
     private WorldServer.ServerBlockEventList[] blockEventQueue = new WorldServer.ServerBlockEventList[] {new WorldServer.ServerBlockEventList(), new WorldServer.ServerBlockEventList()};
@@ -108,7 +104,6 @@ public class WorldServer extends World implements IThreadListener
         this.thePlayerManager = new PlayerManager(this);
         this.provider.registerWorld(this);
         this.chunkProvider = this.createChunkProvider();
-        this.worldTeleporter = new Teleporter(this);
         this.calculateInitialSkylight();
         this.calculateInitialWeather();
         this.getWorldBorder().setSize(server.getMaxWorldSize());
@@ -218,7 +213,6 @@ public class WorldServer extends World implements IThreadListener
         this.villageCollectionObj.tick();
         this.villageSiege.tick();
         this.theProfiler.endStartSection("portalForcer");
-        this.worldTeleporter.removeStalePortalLocations(this.getTotalWorldTime());
         this.theProfiler.endSection();
         this.sendQueuedBlockEvents();
     }
@@ -1126,11 +1120,6 @@ public class WorldServer extends World implements IThreadListener
     public PlayerManager getPlayerManager()
     {
         return this.thePlayerManager;
-    }
-
-    public Teleporter getDefaultTeleporter()
-    {
-        return this.worldTeleporter;
     }
 
     /**

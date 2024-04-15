@@ -30,16 +30,6 @@ public interface INetHandlerPlayServer extends INetHandler
     void handleAnimation(C0APacketAnimation packetIn);
 
     /**
-     * Process chat messages (broadcast back to clients) and commands (executes)
-     */
-    void processChatMessage(C01PacketChatMessage packetIn);
-
-    /**
-     * Retrieves possible tab completions for the requested command string and sends them to the client
-     */
-    void processTabComplete(C14PacketTabComplete packetIn);
-
-    /**
      * Processes the client status updates: respawn attempt from player, opening statistics or achievements, or
      * acquiring 'open inventory' achievement
      */

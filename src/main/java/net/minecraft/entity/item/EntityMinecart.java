@@ -8,7 +8,6 @@ import net.minecraft.block.BlockRailPowered;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityMinecartCommandBlock;
 import net.minecraft.entity.ai.EntityMinecartMobSpawner;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,9 +73,6 @@ public abstract class EntityMinecart extends Entity implements IWorldNameable
 
             case HOPPER:
                 return new EntityMinecartHopper(worldIn, x, y, z);
-
-            case COMMAND_BLOCK:
-                return new EntityMinecartCommandBlock(worldIn, x, y, z);
 
             default:
                 return new EntityMinecartEmpty(worldIn, x, y, z);

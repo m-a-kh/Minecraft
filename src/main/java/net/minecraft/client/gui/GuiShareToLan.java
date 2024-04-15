@@ -87,19 +87,6 @@ public class GuiShareToLan extends GuiScreen
         else if (button.id == 101)
         {
             this.mc.displayGuiScreen((GuiScreen)null);
-            String s = this.mc.getIntegratedServer().shareToLAN(WorldSettings.GameType.getByName(this.field_146599_h), this.field_146600_i);
-            IChatComponent ichatcomponent;
-
-            if (s != null)
-            {
-                ichatcomponent = new ChatComponentTranslation("commands.publish.started", new Object[] {s});
-            }
-            else
-            {
-                ichatcomponent = new ChatComponentText("commands.publish.failed");
-            }
-
-            this.mc.ingameGUI.getChatGUI().printChatMessage(ichatcomponent);
         }
     }
 

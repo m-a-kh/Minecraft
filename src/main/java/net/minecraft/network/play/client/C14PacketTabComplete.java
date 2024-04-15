@@ -61,7 +61,6 @@ public class C14PacketTabComplete implements Packet<INetHandlerPlayServer>
      */
     public void processPacket(INetHandlerPlayServer handler)
     {
-        handler.processTabComplete(this);
     }
 
     public String getMessage()

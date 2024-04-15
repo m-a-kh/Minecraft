@@ -445,10 +445,6 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
                 {
                     this.setText(clickevent.getValue(), true);
                 }
-                else if (clickevent.getAction() == ClickEvent.Action.RUN_COMMAND)
-                {
-                    this.sendChatMessage(clickevent.getValue(), false);
-                }
                 else
                 {
                     LOGGER.error("Don\'t know how to handle " + clickevent);
@@ -459,24 +455,6 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback
 
             return false;
         }
-    }
-
-    /**
-     * Used to add chat messages to the client's GuiChat.
-     */
-    public void sendChatMessage(String msg)
-    {
-        this.sendChatMessage(msg, true);
-    }
-
-    public void sendChatMessage(String msg, boolean addToChat)
-    {
-        if (addToChat)
-        {
-            this.mc.ingameGUI.getChatGUI().addToSentMessages(msg);
-        }
-
-        this.mc.thePlayer.sendChatMessage(msg);
     }
 
     /**

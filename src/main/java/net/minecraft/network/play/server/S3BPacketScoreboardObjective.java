@@ -61,7 +61,7 @@ public class S3BPacketScoreboardObjective implements Packet<INetHandlerPlayClien
      */
     public void processPacket(INetHandlerPlayClient handler)
     {
-        handler.handleScoreboardObjective(this);
+
     }
 
     public String func_149339_c()

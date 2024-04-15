@@ -11,15 +11,13 @@ public class GameConfiguration
     public final GameConfiguration.DisplayInformation displayInfo;
     public final GameConfiguration.FolderInformation folderInfo;
     public final GameConfiguration.GameInformation gameInfo;
-    public final GameConfiguration.ServerInformation serverInfo;
 
-    public GameConfiguration(GameConfiguration.UserInformation userInfoIn, GameConfiguration.DisplayInformation displayInfoIn, GameConfiguration.FolderInformation folderInfoIn, GameConfiguration.GameInformation gameInfoIn, GameConfiguration.ServerInformation serverInfoIn)
+    public GameConfiguration(GameConfiguration.UserInformation userInfoIn, GameConfiguration.DisplayInformation displayInfoIn, GameConfiguration.FolderInformation folderInfoIn, GameConfiguration.GameInformation gameInfoIn)
     {
         this.userInfo = userInfoIn;
         this.displayInfo = displayInfoIn;
         this.folderInfo = folderInfoIn;
         this.gameInfo = gameInfoIn;
-        this.serverInfo = serverInfoIn;
     }
 
     public static class DisplayInformation
@@ -63,18 +61,6 @@ public class GameConfiguration
         {
             this.isDemo = isDemoIn;
             this.version = versionIn;
-        }
-    }
-
-    public static class ServerInformation
-    {
-        public final String serverName;
-        public final int serverPort;
-
-        public ServerInformation(String serverNameIn, int serverPortIn)
-        {
-            this.serverName = serverNameIn;
-            this.serverPort = serverPortIn;
         }
     }
 

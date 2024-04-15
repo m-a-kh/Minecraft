@@ -3,7 +3,6 @@ package net.minecraft.client.entity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.GuiCommandBlock;
 import net.minecraft.client.gui.GuiEnchantment;
 import net.minecraft.client.gui.GuiHopper;
 import net.minecraft.client.gui.GuiMerchant;
@@ -19,7 +18,6 @@ import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.item.EntityItem;
@@ -429,11 +427,6 @@ public class EntityPlayerSP extends AbstractClientPlayer
         return this.statWriter;
     }
 
-    public void addChatComponentMessage(IChatComponent chatComponent)
-    {
-        this.mc.ingameGUI.getChatGUI().printChatMessage(chatComponent);
-    }
-
     protected boolean pushOutOfBlocks(double x, double y, double z)
     {
         if (this.noClip)
@@ -530,14 +523,6 @@ public class EntityPlayerSP extends AbstractClientPlayer
     }
 
     /**
-     * Send a chat message to the CommandSender
-     */
-    public void addChatMessage(IChatComponent component)
-    {
-        this.mc.ingameGUI.getChatGUI().printChatMessage(component);
-    }
-
-    /**
      * Returns {@code true} if the CommandSender is allowed to execute the command, {@code false} if not
      */
     public boolean canCommandSenderUseCommand(int permLevel, String commandName)
@@ -582,10 +567,6 @@ public class EntityPlayerSP extends AbstractClientPlayer
         this.mc.displayGuiScreen(new GuiEditSign(signTile));
     }
 
-    public void openEditCommandBlock(CommandBlockLogic cmdBlockLogic)
-    {
-        this.mc.displayGuiScreen(new GuiCommandBlock(cmdBlockLogic));
-    }
 
     /**
      * Displays the GUI for interacting with a book.

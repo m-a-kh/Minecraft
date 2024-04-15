@@ -10,7 +10,6 @@ import java.util.concurrent.FutureTask;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ThreadLanServerPing;
-import net.minecraft.command.ServerCommandManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.profiler.PlayerUsageSnooper;
@@ -24,7 +23,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.demo.DemoWorldServer;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import org.apache.logging.log4j.LogManager;
@@ -59,12 +57,7 @@ public class IntegratedServer extends MinecraftServer
         this.setBuildLimit(256);
         this.setConfigManager(new IntegratedPlayerList(this));
         this.mc = mcIn;
-        this.theWorldSettings = this.isDemo() ? DemoWorldServer.demoWorldSettings : settings;
-    }
-
-    protected ServerCommandManager createNewCommandManager()
-    {
-        return new IntegratedServerCommandManager();
+        this.theWorldSettings = settings;
     }
 
     protected void loadAllWorlds(String saveName, String worldNameIn, long seed, WorldType type, String worldNameIn2)
@@ -101,14 +94,7 @@ public class IntegratedServer extends MinecraftServer
 
             if (i == 0)
             {
-                if (this.isDemo())
-                {
-                    this.worldServers[i] = (WorldServer)(new DemoWorldServer(this, isavehandler, worldinfo, j, this.theProfiler)).init();
-                }
-                else
-                {
                     this.worldServers[i] = (WorldServer)(new WorldServer(this, isavehandler, worldinfo, j, this.theProfiler)).init();
-                }
 
                 this.worldServers[i].initialize(this.theWorldSettings);
             }

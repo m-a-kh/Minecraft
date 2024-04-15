@@ -19,12 +19,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.GuardianSound;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiDownloadTerrain;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMerchant;
-import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.GuiScreenDemo;
@@ -184,7 +181,6 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.tileentity.TileEntityBeacon;
-import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.tileentity.TileEntitySign;
@@ -795,7 +791,8 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         }
         else
         {
-            this.gameController.displayGuiScreen(new GuiDisconnected(new GuiMultiplayer(new GuiMainMenu()), "disconnect.lost", reason));
+            // TODO: 4/15/2024
+//            this.gameController.displayGuiScreen(new GuiDisconnected(new GuiMultiplayer(new GuiMainMenu()), "disconnect.lost", reason));
         }
     }
 
@@ -828,23 +825,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
 
             this.gameController.effectRenderer.addEffect(new EntityPickupFX(this.clientWorldController, entity, entitylivingbase, 0.5F));
             this.clientWorldController.removeEntityFromWorld(packetIn.getCollectedItemEntityID());
-        }
-    }
-
-    /**
-     * Prints a chatmessage in the chat GUI
-     */
-    public void handleChat(S02PacketChat packetIn)
-    {
-        PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.gameController);
-
-        if (packetIn.getType() == 2)
-        {
-            this.gameController.ingameGUI.setRecordPlaying(packetIn.getChatComponent(), false);
-        }
-        else
-        {
-            this.gameController.ingameGUI.getChatGUI().printChatMessage(packetIn.getChatComponent());
         }
     }
 
@@ -1261,7 +1241,7 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
             TileEntity tileentity = this.gameController.theWorld.getTileEntity(packetIn.getPos());
             int i = packetIn.getTileEntityType();
 
-            if (i == 1 && tileentity instanceof TileEntityMobSpawner || i == 2 && tileentity instanceof TileEntityCommandBlock || i == 3 && tileentity instanceof TileEntityBeacon || i == 4 && tileentity instanceof TileEntitySkull || i == 5 && tileentity instanceof TileEntityFlowerPot || i == 6 && tileentity instanceof TileEntityBanner)
+            if (i == 1 && tileentity instanceof TileEntityMobSpawner || i == 3 && tileentity instanceof TileEntityBeacon || i == 4 && tileentity instanceof TileEntitySkull || i == 5 && tileentity instanceof TileEntityFlowerPot || i == 6 && tileentity instanceof TileEntityBanner)
             {
                 tileentity.readFromNBT(packetIn.getNbtCompound());
             }
@@ -1381,18 +1361,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
             if (f == 0.0F)
             {
                 this.gameController.displayGuiScreen(new GuiScreenDemo());
-            }
-            else if (f == 101.0F)
-            {
-                this.gameController.ingameGUI.getChatGUI().printChatMessage(new ChatComponentTranslation("demo.help.movement", new Object[] {GameSettings.getKeyDisplayString(gamesettings.keyBindForward.getKeyCode()), GameSettings.getKeyDisplayString(gamesettings.keyBindLeft.getKeyCode()), GameSettings.getKeyDisplayString(gamesettings.keyBindBack.getKeyCode()), GameSettings.getKeyDisplayString(gamesettings.keyBindRight.getKeyCode())}));
-            }
-            else if (f == 102.0F)
-            {
-                this.gameController.ingameGUI.getChatGUI().printChatMessage(new ChatComponentTranslation("demo.help.jump", new Object[] {GameSettings.getKeyDisplayString(gamesettings.keyBindJump.getKeyCode())}));
-            }
-            else if (f == 103.0F)
-            {
-                this.gameController.ingameGUI.getChatGUI().printChatMessage(new ChatComponentTranslation("demo.help.inventory", new Object[] {GameSettings.getKeyDisplayString(gamesettings.keyBindInventory.getKeyCode())}));
             }
         }
         else if (i == 6)
@@ -1654,21 +1622,6 @@ public class NetHandlerPlayClient implements INetHandlerPlayClient
         entityplayer.capabilities.allowFlying = packetIn.isAllowFlying();
         entityplayer.capabilities.setFlySpeed(packetIn.getFlySpeed());
         entityplayer.capabilities.setPlayerWalkSpeed(packetIn.getWalkSpeed());
-    }
-
-    /**
-     * Displays the available command-completion options the server knows of
-     */
-    public void handleTabComplete(S3APacketTabComplete packetIn)
-    {
-        PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.gameController);
-        String[] astring = packetIn.func_149630_c();
-
-        if (this.gameController.currentScreen instanceof GuiChat)
-        {
-            GuiChat guichat = (GuiChat)this.gameController.currentScreen;
-            guichat.onAutocompleteResponse(astring);
-        }
     }
 
     public void handleSoundEffect(S29PacketSoundEffect packetIn)

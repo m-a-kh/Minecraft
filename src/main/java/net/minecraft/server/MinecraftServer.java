@@ -33,11 +33,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import javax.imageio.ImageIO;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandResultStats;
-import net.minecraft.command.ICommandManager;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.ServerCommandManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,7 +64,6 @@ import net.minecraft.world.WorldServerMulti;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.storage.AnvilSaveConverter;
-import net.minecraft.world.demo.DemoWorldServer;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
@@ -77,7 +71,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class MinecraftServer implements Runnable, ICommandSender, IThreadListener, IPlayerUsage
+public abstract class MinecraftServer implements Runnable, IThreadListener, IPlayerUsage
 {
     private static final Logger logger = LogManager.getLogger();
     public static final File USER_CACHE_FILE = new File("usercache.json");
@@ -90,7 +84,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
     private final PlayerUsageSnooper usageSnooper = new PlayerUsageSnooper("server", this, getCurrentTimeMillis());
     private final File anvilFile;
     private final List<ITickable> playersOnline = Lists.<ITickable>newArrayList();
-    protected final ICommandManager commandManager;
     public final Profiler theProfiler = new Profiler();
     private final NetworkSystem networkSystem;
     private final ServerStatusResponse statusResponse = new ServerStatusResponse();
@@ -190,7 +183,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         this.anvilFile = null;
         this.networkSystem = null;
         this.profileCache = new PlayerProfileCache(this, workDir);
-        this.commandManager = null;
         this.anvilConverterForAnvilFile = null;
         this.authService = new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString());
         this.sessionService = this.authService.createMinecraftSessionService();
@@ -204,16 +196,10 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         this.anvilFile = workDir;
         this.networkSystem = new NetworkSystem(this);
         this.profileCache = new PlayerProfileCache(this, profileCacheDir);
-        this.commandManager = this.createNewCommandManager();
         this.anvilConverterForAnvilFile = new AnvilSaveConverter(workDir);
         this.authService = new YggdrasilAuthenticationService(proxy, UUID.randomUUID().toString());
         this.sessionService = this.authService.createMinecraftSessionService();
         this.profileRepo = this.authService.createProfileRepository();
-    }
-
-    protected ServerCommandManager createNewCommandManager()
-    {
-        return new ServerCommandManager();
     }
 
     /**
@@ -280,12 +266,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
 
         if (worldinfo == null)
         {
-            if (this.isDemo())
-            {
-                worldsettings = DemoWorldServer.demoWorldSettings;
-            }
-            else
-            {
                 worldsettings = new WorldSettings(seed, this.getGameType(), this.canStructuresSpawn(), this.isHardcore(), type);
                 worldsettings.setWorldName(worldNameIn2);
 
@@ -293,7 +273,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
                 {
                     worldsettings.enableBonusChest();
                 }
-            }
 
             worldinfo = new WorldInfo(worldsettings, worldNameIn);
         }
@@ -319,14 +298,7 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
 
             if (i == 0)
             {
-                if (this.isDemo())
-                {
-                    this.worldServers[i] = (WorldServer)(new DemoWorldServer(this, isavehandler, worldinfo, j, this.theProfiler)).init();
-                }
-                else
-                {
                     this.worldServers[i] = (WorldServer)(new WorldServer(this, isavehandler, worldinfo, j, this.theProfiler)).init();
-                }
 
                 this.worldServers[i].initialize(worldsettings);
             }
@@ -918,50 +890,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         return report;
     }
 
-    public List<String> getTabCompletions(ICommandSender sender, String input, BlockPos pos)
-    {
-        List<String> list = Lists.<String>newArrayList();
-
-        if (input.startsWith("/"))
-        {
-            input = input.substring(1);
-            boolean flag = !input.contains(" ");
-            List<String> list1 = this.commandManager.getTabCompletionOptions(sender, input, pos);
-
-            if (list1 != null)
-            {
-                for (String s2 : list1)
-                {
-                    if (flag)
-                    {
-                        list.add("/" + s2);
-                    }
-                    else
-                    {
-                        list.add(s2);
-                    }
-                }
-            }
-
-            return list;
-        }
-        else
-        {
-            String[] astring = input.split(" ", -1);
-            String s = astring[astring.length - 1];
-
-            for (String s1 : this.serverConfigManager.getAllUsernames())
-            {
-                if (CommandBase.doesStringStartWith(s, s1))
-                {
-                    list.add(s1);
-                }
-            }
-
-            return list;
-        }
-    }
-
     /**
      * Gets mcServer.
      */
@@ -997,11 +925,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
     public boolean canCommandSenderUseCommand(int permLevel, String commandName)
     {
         return true;
-    }
-
-    public ICommandManager getCommandManager()
-    {
-        return this.commandManager;
     }
 
     /**
@@ -1484,18 +1407,6 @@ public abstract class MinecraftServer implements Runnable, ICommandSender, IThre
         }
 
         return null;
-    }
-
-    /**
-     * Returns true if the command sender should be sent feedback about executed commands
-     */
-    public boolean sendCommandFeedback()
-    {
-        return getServer().worldServers[0].getGameRules().getBoolean("sendCommandFeedback");
-    }
-
-    public void setCommandStat(CommandResultStats.Type type, int amount)
-    {
     }
 
     public int getMaxWorldSize()

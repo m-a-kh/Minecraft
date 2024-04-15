@@ -49,7 +49,6 @@ public class S02PacketChat implements Packet<INetHandlerPlayClient>
      */
     public void processPacket(INetHandlerPlayClient handler)
     {
-        handler.handleChat(this);
     }
 
     public IChatComponent getChatComponent()

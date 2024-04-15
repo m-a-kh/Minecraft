@@ -305,7 +305,6 @@ public abstract class TileEntity
         addMapping(TileEntityBrewingStand.class, "Cauldron");
         addMapping(TileEntityEnchantmentTable.class, "EnchantTable");
         addMapping(TileEntityEndPortal.class, "Airportal");
-        addMapping(TileEntityCommandBlock.class, "Control");
         addMapping(TileEntityBeacon.class, "Beacon");
         addMapping(TileEntitySkull.class, "Skull");
         addMapping(TileEntityDaylightDetector.class, "DLDetector");

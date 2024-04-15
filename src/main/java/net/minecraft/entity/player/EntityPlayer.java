@@ -11,7 +11,6 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -1184,10 +1183,6 @@ public abstract class EntityPlayer extends EntityLivingBase
     }
 
     public void openEditSign(TileEntitySign signTile)
-    {
-    }
-
-    public void openEditCommandBlock(CommandBlockLogic cmdBlockLogic)
     {
     }
 

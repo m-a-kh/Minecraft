@@ -12,8 +12,6 @@ import net.minecraft.block.BlockWall;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockPattern;
-import net.minecraft.command.CommandResultStats;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -47,7 +45,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-public abstract class Entity implements ICommandSender
+public abstract class Entity
 {
     private static final AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     private static int nextEntityID;
@@ -240,9 +238,6 @@ public abstract class Entity implements ICommandSender
     private boolean invulnerable;
     protected UUID entityUniqueID;
 
-    /** The command result statistics for this Entity. */
-    private final CommandResultStats cmdResultStats;
-
     public int getEntityId()
     {
         return this.entityId;
@@ -273,7 +268,6 @@ public abstract class Entity implements ICommandSender
         this.fireResistance = 1;
         this.firstUpdate = true;
         this.entityUniqueID = MathHelper.getRandomUuid(this.rand);
-        this.cmdResultStats = new CommandResultStats();
         this.worldObj = worldIn;
         this.setPosition(0.0D, 0.0D, 0.0D);
 
@@ -1622,8 +1616,6 @@ public abstract class Entity implements ICommandSender
                 tagCompund.setBoolean("CustomNameVisible", this.getAlwaysRenderNameTag());
             }
 
-            this.cmdResultStats.writeStatsToNBT(tagCompund);
-
             if (this.isSilent())
             {
                 tagCompund.setBoolean("Silent", this.isSilent());
@@ -1712,7 +1704,6 @@ public abstract class Entity implements ICommandSender
             }
 
             this.setAlwaysRenderNameTag(tagCompund.getBoolean("CustomNameVisible"));
-            this.cmdResultStats.readStatsFromNBT(tagCompund);
             this.setSilent(tagCompund.getBoolean("Silent"));
             this.readEntityFromNBT(tagCompund);
 
@@ -2762,24 +2753,6 @@ public abstract class Entity implements ICommandSender
     public boolean sendCommandFeedback()
     {
         return false;
-    }
-
-    public void setCommandStat(CommandResultStats.Type type, int amount)
-    {
-        this.cmdResultStats.setCommandStatScore(this, type, amount);
-    }
-
-    public CommandResultStats getCommandStats()
-    {
-        return this.cmdResultStats;
-    }
-
-    /**
-     * Set the CommandResultStats from the entity
-     */
-    public void setCommandStats(Entity entityIn)
-    {
-        this.cmdResultStats.addAllStats(entityIn.getCommandStats());
     }
 
     public NBTTagCompound getNBTTagCompound()

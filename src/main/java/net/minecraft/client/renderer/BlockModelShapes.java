@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockColored;
-import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockDoor;
@@ -166,7 +165,6 @@ public class BlockModelShapes
         this.registerBlockWithStateMapper(Blocks.cactus, (new StateMap.Builder()).ignore(new IProperty[] {BlockCactus.AGE}).build());
         this.registerBlockWithStateMapper(Blocks.reeds, (new StateMap.Builder()).ignore(new IProperty[] {BlockReed.AGE}).build());
         this.registerBlockWithStateMapper(Blocks.jukebox, (new StateMap.Builder()).ignore(new IProperty[] {BlockJukebox.HAS_RECORD}).build());
-        this.registerBlockWithStateMapper(Blocks.command_block, (new StateMap.Builder()).ignore(new IProperty[] {BlockCommandBlock.TRIGGERED}).build());
         this.registerBlockWithStateMapper(Blocks.cobblestone_wall, (new StateMap.Builder()).withName(BlockWall.VARIANT).withSuffix("_wall").build());
         this.registerBlockWithStateMapper(Blocks.double_plant, (new StateMap.Builder()).withName(BlockDoublePlant.VARIANT).ignore(new IProperty[] {BlockDoublePlant.FACING}).build());
         this.registerBlockWithStateMapper(Blocks.oak_fence_gate, (new StateMap.Builder()).ignore(new IProperty[] {BlockFenceGate.POWERED}).build());

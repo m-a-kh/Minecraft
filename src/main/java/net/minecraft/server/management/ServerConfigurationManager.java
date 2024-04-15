@@ -54,7 +54,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.border.IBorderListener;
 import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.demo.DemoWorldManager;
 import net.minecraft.world.storage.IPlayerFileData;
 import net.minecraft.world.storage.WorldInfo;
 import org.apache.logging.log4j.LogManager;
@@ -437,14 +436,7 @@ public abstract class ServerConfigurationManager
 
         ItemInWorldManager iteminworldmanager;
 
-        if (this.mcServer.isDemo())
-        {
-            iteminworldmanager = new DemoWorldManager(this.mcServer.worldServerForDimension(0));
-        }
-        else
-        {
             iteminworldmanager = new ItemInWorldManager(this.mcServer.worldServerForDimension(0));
-        }
 
         return new EntityPlayerMP(this.mcServer, this.mcServer.worldServerForDimension(0), profile, iteminworldmanager);
     }
@@ -464,20 +456,12 @@ public abstract class ServerConfigurationManager
         playerIn.dimension = dimension;
         ItemInWorldManager iteminworldmanager;
 
-        if (this.mcServer.isDemo())
-        {
-            iteminworldmanager = new DemoWorldManager(this.mcServer.worldServerForDimension(playerIn.dimension));
-        }
-        else
-        {
             iteminworldmanager = new ItemInWorldManager(this.mcServer.worldServerForDimension(playerIn.dimension));
-        }
 
         EntityPlayerMP entityplayermp = new EntityPlayerMP(this.mcServer, this.mcServer.worldServerForDimension(playerIn.dimension), playerIn.getGameProfile(), iteminworldmanager);
         entityplayermp.playerNetServerHandler = playerIn.playerNetServerHandler;
         entityplayermp.clonePlayer(playerIn, conqueredEnd);
         entityplayermp.setEntityId(playerIn.getEntityId());
-        entityplayermp.setCommandStats(playerIn);
         WorldServer worldserver = this.mcServer.worldServerForDimension(playerIn.dimension);
         this.setPlayerGameTypeBasedOnOther(entityplayermp, playerIn, worldserver);
 
@@ -614,7 +598,6 @@ public abstract class ServerConfigurationManager
             if (entityIn.isEntityAlive())
             {
                 entityIn.setLocationAndAngles(d0, entityIn.posY, d1, entityIn.rotationYaw, entityIn.rotationPitch);
-                toWorldIn.getDefaultTeleporter().placeInPortal(entityIn, f);
                 toWorldIn.spawnEntityInWorld(entityIn);
                 toWorldIn.updateEntityWithOptionalForce(entityIn, false);
             }

@@ -8,18 +8,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
 import net.minecraft.block.material.Material;
-import net.minecraft.command.server.CommandBlockLogic;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityMinecartCommandBlock;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityHorse;
@@ -28,72 +20,32 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerBeacon;
-import net.minecraft.inventory.ContainerMerchant;
-import net.minecraft.inventory.ContainerRepair;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemEditableBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemWritableBook;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.INetHandlerPlayServer;
-import net.minecraft.network.play.client.C00PacketKeepAlive;
-import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.network.play.client.C09PacketHeldItemChange;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.network.play.client.C0CPacketInput;
-import net.minecraft.network.play.client.C0DPacketCloseWindow;
-import net.minecraft.network.play.client.C0EPacketClickWindow;
-import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
-import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
-import net.minecraft.network.play.client.C11PacketEnchantItem;
-import net.minecraft.network.play.client.C12PacketUpdateSign;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
-import net.minecraft.network.play.client.C14PacketTabComplete;
-import net.minecraft.network.play.client.C15PacketClientSettings;
-import net.minecraft.network.play.client.C16PacketClientStatus;
-import net.minecraft.network.play.client.C17PacketCustomPayload;
-import net.minecraft.network.play.client.C18PacketSpectate;
-import net.minecraft.network.play.client.C19PacketResourcePackStatus;
-import net.minecraft.network.play.server.S00PacketKeepAlive;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.network.play.server.S07PacketRespawn;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
-import net.minecraft.network.play.server.S18PacketEntityTeleport;
-import net.minecraft.network.play.server.S23PacketBlockChange;
-import net.minecraft.network.play.server.S2FPacketSetSlot;
-import net.minecraft.network.play.server.S32PacketConfirmTransaction;
-import net.minecraft.network.play.server.S3APacketTabComplete;
-import net.minecraft.network.play.server.S40PacketDisconnect;
+import net.minecraft.network.play.client.*;
+import net.minecraft.network.play.server.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.UserListBansEntry;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatAllowedCharacters;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.IntHashMap;
-import net.minecraft.util.ReportedException;
+import net.minecraft.util.*;
 import net.minecraft.world.WorldServer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable
 {
@@ -807,7 +759,7 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable
 
             if (s.startsWith("/"))
             {
-                this.handleSlashCommand(s);
+
             }
             else
             {
@@ -822,14 +774,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable
                 this.kickPlayerFromServer("disconnect.spam");
             }
         }
-    }
-
-    /**
-     * Handle commands that start with a /
-     */
-    private void handleSlashCommand(String command)
-    {
-        this.serverController.getCommandManager().executeCommand(this.playerEntity, command);
     }
 
     public void handleAnimation(C0APacketAnimation packetIn)
@@ -1210,22 +1154,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable
     }
 
     /**
-     * Retrieves possible tab completions for the requested command string and sends them to the client
-     */
-    public void processTabComplete(C14PacketTabComplete packetIn)
-    {
-        PacketThreadUtil.checkThreadAndEnqueue(packetIn, this, this.playerEntity.getServerForPlayer());
-        List<String> list = Lists.<String>newArrayList();
-
-        for (String s : this.serverController.getTabCompletions(this.playerEntity, packetIn.getMessage(), packetIn.getTargetBlock()))
-        {
-            list.add(s);
-        }
-
-        this.playerEntity.playerNetServerHandler.sendPacket(new S3APacketTabComplete((String[])list.toArray(new String[list.size()])));
-    }
-
-    /**
      * Updates serverside copy of client settings: language, render distance, chat visibility, chat colours, difficulty,
      * and whether to show the cape
      */
@@ -1351,60 +1279,6 @@ public class NetHandlerPlayServer implements INetHandlerPlayServer, ITickable
             if (!this.serverController.isCommandBlockEnabled())
             {
                 this.playerEntity.addChatMessage(new ChatComponentTranslation("advMode.notEnabled", new Object[0]));
-            }
-            else if (this.playerEntity.canCommandSenderUseCommand(2, "") && this.playerEntity.capabilities.isCreativeMode)
-            {
-                PacketBuffer packetbuffer = packetIn.getBufferData();
-
-                try
-                {
-                    int j = packetbuffer.readByte();
-                    CommandBlockLogic commandblocklogic = null;
-
-                    if (j == 0)
-                    {
-                        TileEntity tileentity = this.playerEntity.worldObj.getTileEntity(new BlockPos(packetbuffer.readInt(), packetbuffer.readInt(), packetbuffer.readInt()));
-
-                        if (tileentity instanceof TileEntityCommandBlock)
-                        {
-                            commandblocklogic = ((TileEntityCommandBlock)tileentity).getCommandBlockLogic();
-                        }
-                    }
-                    else if (j == 1)
-                    {
-                        Entity entity = this.playerEntity.worldObj.getEntityByID(packetbuffer.readInt());
-
-                        if (entity instanceof EntityMinecartCommandBlock)
-                        {
-                            commandblocklogic = ((EntityMinecartCommandBlock)entity).getCommandBlockLogic();
-                        }
-                    }
-
-                    String s1 = packetbuffer.readStringFromBuffer(packetbuffer.readableBytes());
-                    boolean flag = packetbuffer.readBoolean();
-
-                    if (commandblocklogic != null)
-                    {
-                        commandblocklogic.setCommand(s1);
-                        commandblocklogic.setTrackOutput(flag);
-
-                        if (!flag)
-                        {
-                            commandblocklogic.setLastOutput((IChatComponent)null);
-                        }
-
-                        commandblocklogic.updateCommand();
-                        this.playerEntity.addChatMessage(new ChatComponentTranslation("advMode.setCommand.success", new Object[] {s1}));
-                    }
-                }
-                catch (Exception exception1)
-                {
-                    logger.error((String)"Couldn\'t set command block", (Throwable)exception1);
-                }
-                finally
-                {
-                    packetbuffer.release();
-                }
             }
             else
             {

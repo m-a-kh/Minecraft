@@ -97,11 +97,6 @@ public interface INetHandlerPlayClient extends INetHandler
     void handleSpawnMob(S0FPacketSpawnMob packetIn);
 
     /**
-     * May create a scoreboard objective, remove an objective from the scoreboard or update an objectives' displayname
-     */
-    void handleScoreboardObjective(S3BPacketScoreboardObjective packetIn);
-
-    /**
      * Handles the spawning of a painting object
      */
     void handleSpawnPainting(S10PacketSpawnPainting packetIn);
@@ -149,16 +144,6 @@ public interface INetHandlerPlayClient extends INetHandler
      * Updates the block and metadata and generates a blockupdate (and notify the clients)
      */
     void handleBlockChange(S23PacketBlockChange packetIn);
-
-    /**
-     * Prints a chatmessage in the chat GUI
-     */
-    void handleChat(S02PacketChat packetIn);
-
-    /**
-     * Displays the available command-completion options the server knows of
-     */
-    void handleTabComplete(S3APacketTabComplete packetIn);
 
     /**
      * Received from the servers PlayerManager if between 1 and 64 blocks in a chunk are changed. If only one block

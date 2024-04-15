@@ -50,9 +50,6 @@ public class GuiIngame extends Gui
     private final Random rand = new Random();
     private final Minecraft mc;
     private final RenderItem itemRenderer;
-
-    /** ChatGUI instance that retains all previous chat data */
-    private final GuiNewChat persistantChatGUI;
     private int updateCounter;
 
     /** The string specifying which record music is playing */
@@ -108,7 +105,6 @@ public class GuiIngame extends Gui
         this.itemRenderer = mcIn.getRenderItem();
         this.overlayDebug = new GuiOverlayDebug(mcIn);
         this.spectatorGui = new GuiSpectator(mcIn);
-        this.persistantChatGUI = new GuiNewChat(mcIn);
         this.overlayPlayerList = new GuiPlayerTabOverlay(mcIn, this);
         this.setDefaultTitlesTimes();
     }
@@ -340,7 +336,6 @@ public class GuiIngame extends Gui
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.0F, (float)(j - 48), 0.0F);
         this.mc.mcProfiler.startSection("chat");
-        this.persistantChatGUI.drawChat(this.updateCounter);
         this.mc.mcProfiler.endSection();
         GlStateManager.popMatrix();
         scoreobjective1 = scoreboard.getObjectiveInDisplaySlot(0);
@@ -1158,14 +1153,6 @@ public class GuiIngame extends Gui
     public void setRecordPlaying(IChatComponent component, boolean isPlaying)
     {
         this.setRecordPlaying(component.getUnformattedText(), isPlaying);
-    }
-
-    /**
-     * returns a pointer to the persistant Chat GUI, containing all previous chat messages and such
-     */
-    public GuiNewChat getChatGUI()
-    {
-        return this.persistantChatGUI;
     }
 
     public int getUpdateCounter()

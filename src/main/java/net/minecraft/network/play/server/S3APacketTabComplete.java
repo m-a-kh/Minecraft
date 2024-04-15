@@ -49,7 +49,7 @@ public class S3APacketTabComplete implements Packet<INetHandlerPlayClient>
      */
     public void processPacket(INetHandlerPlayClient handler)
     {
-        handler.handleTabComplete(this);
+
     }
 
     public String[] func_149630_c()

@@ -1,21 +1,18 @@
 package net.minecraft.item;
 
-import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.server.S2FPacketSetSlot;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ChatComponentProcessor;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemEditableBook extends Item
 {
@@ -113,23 +110,6 @@ public class ItemEditableBook extends Item
                 {
                     NBTTagList nbttaglist = nbttagcompound.getTagList("pages", 8);
 
-                    for (int i = 0; i < nbttaglist.tagCount(); ++i)
-                    {
-                        String s = nbttaglist.getStringTagAt(i);
-                        IChatComponent ichatcomponent;
-
-                        try
-                        {
-                            ichatcomponent = IChatComponent.Serializer.jsonToComponent(s);
-                            ichatcomponent = ChatComponentProcessor.processComponent(player, ichatcomponent, player);
-                        }
-                        catch (Exception var9)
-                        {
-                            ichatcomponent = new ChatComponentText(s);
-                        }
-
-                        nbttaglist.set(i, new NBTTagString(IChatComponent.Serializer.componentToJson(ichatcomponent)));
-                    }
 
                     nbttagcompound.setTag("pages", nbttaglist);
 
